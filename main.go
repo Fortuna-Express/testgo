@@ -7,19 +7,21 @@ import (
 	"os"
 )
 
-func handler(w http.ResponseWriter, r *http.Request) {
-	fmt.Fprintf(w, "Hello, world!")
-}
-
 func main() {
+	// Obtén el puerto de la variable de entorno, o usa 8080 por defecto.
 	port := os.Getenv("PORT")
 	if port == "" {
-		port = "8080" // Si no se encuentra la variable de entorno PORT, usamos el puerto 8080
+		port = "8080"
 	}
 
-	http.HandleFunc("/", handler)
-	log.Println("Listening on port", port)
-	err := http.ListenAndServe("0.0.0.0:"+port, nil)
+	// Configura la ruta principal
+	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
+		fmt.Fprintf(w, "¡Hola, Mundo!")
+	})
+
+	// Inicia el servidor
+	log.Printf("Escuchando en el puerto %s...\n", port)
+	err := http.ListenAndServe(":"+port, nil)
 	if err != nil {
 		log.Fatal(err)
 	}
